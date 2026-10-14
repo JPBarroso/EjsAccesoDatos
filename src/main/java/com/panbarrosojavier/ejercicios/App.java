@@ -1,6 +1,7 @@
 package com.panbarrosojavier.ejercicios;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.attribute.FileOwnerAttributeView;
 import java.nio.file.attribute.FileTime;
 import java.nio.file.attribute.UserPrincipal;
@@ -22,8 +23,8 @@ public class App
         if(args.length > 0){
             try{
                 arg0 = Integer.parseInt(args[0]);
-                if(arg0 <1){
-                    System.err.println("Argumento no válido. Debe ser mayor que 1.");
+                if(arg0 <0){
+                    System.err.println("Argumento no válido. Debe ser mayor que 0.");
                     System.exit(1);
                 }
             }
@@ -37,9 +38,11 @@ public class App
             System.exit(1);
         }
 
-        Path directorioPersonal = Path.of(System.getProperty("user.home"));
-        try(Stream<Path> ficheros = Files.list(directorioPersonal)){
-            ficheros.forEach(f ->{
+        Path directorioPersonal = Paths.get(System.getProperty("user.home"));
+        if(arg0 == 0){
+            try(Stream<Path> ficheros = Files.list(directorioPersonal)){
+            ficheros
+            .forEach(f ->{
                 String str = mostrarInformacion(f);
                 if(!str.equals("")){
                     System.out.println(str);
@@ -50,11 +53,29 @@ public class App
         catch(IOException e){
             System.out.println("Error al entrar en el directorio");
         }
+        }
+        else{
+            try(Stream<Path> ficheros = Files.list(directorioPersonal)){
+            ficheros
+            .limit(arg0)
+            .forEach(f ->{
+                String str = mostrarInformacion(f);
+                if(!str.equals("")){
+                    System.out.println(str);
+                }
+            });
+
+        }
+        catch(IOException e){
+            System.out.println("Error al entrar en el directorio");
+        }
+        }
+        
     }
     public static String mostrarInformacion(Path p){
         String str = "";
         try{
-            if(!Files.isHidden(p)){
+            if(!Files.isHidden(p) || !Files.isSymbolicLink(p)){
                 str += p.getFileName();
                 if(Files.isDirectory(p)){
                     str +="/";
