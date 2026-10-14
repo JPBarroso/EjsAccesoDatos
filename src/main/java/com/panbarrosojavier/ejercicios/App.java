@@ -24,7 +24,7 @@ public class App
             try{
                 arg0 = Integer.parseInt(args[0]);
                 if(arg0 <0){
-                    System.err.println("Argumento no válido. Debe ser mayor que 0.");
+                    System.err.println("Argumento no válido. Debe ser 0 o mayor.");
                     System.exit(1);
                 }
             }
