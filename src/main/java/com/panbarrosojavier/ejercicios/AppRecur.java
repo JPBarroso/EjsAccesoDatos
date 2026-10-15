@@ -136,9 +136,10 @@ public class AppRecur
     }
     public static String calcularTamano(int bytes){
         double resul = 0;
-        String resString = " bytes";
+        String resString = "";
         if(bytes < 1024 ){
             resul = bytes;
+            resString = bytes + " bytes";
         }
         else if(bytes >=1024 && bytes <1048576){
             resul = bytes / 1024;
